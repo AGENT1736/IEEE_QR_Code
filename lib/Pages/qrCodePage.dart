@@ -38,49 +38,49 @@ class _QrCodePageState extends State<QrCodePage> {
     var screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(
-              Icons.arrow_back,
-              color: Colors.white),
-          onPressed: (){
-            setState(() {
-              Navigator.pop(context);
-            });
-          },
-        ),
-        backgroundColor: Colors.blue[900],
-        title:const Center(
-          child: Text("IEEE QR-CODE",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white)
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(
+                Icons.arrow_back,
+                color: Colors.white),
+            onPressed: (){
+              setState(() {
+                Navigator.pop(context);
+              });
+            },
+          ),
+          backgroundColor: Colors.blue[900],
+          title:const Center(
+            child: Text("IEEE QR-CODE",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white)
+            ),
           ),
         ),
-      ),
-      body: Stack(alignment: Alignment.center,
-      children:<Widget> [
-        buildQrView(context),
-        Positioned(
-          bottom: 10,
-            child: buildResult()
+        body: Stack(alignment: Alignment.center,
+          children:<Widget> [
+            buildQrView(context),
+            Positioned(
+                bottom: 10,
+                child: buildResult()
+            )
+          ],
         )
-      ],
-      )
     );
   }
 
   Widget buildQrView(BuildContext context) => QRView(
-      key: qrKey,
-      onQRViewCreated: onQRViewCreated,
-      overlay: QrScannerOverlayShape(
+    key: qrKey,
+    onQRViewCreated: onQRViewCreated,
+    overlay: QrScannerOverlayShape(
         cutOutSize: MediaQuery.of(context).size.width * 0.8,
         borderWidth: 10,
         borderLength: 20,
         borderRadius: 10,
         borderColor: Colors.blueAccent
-      ),
+    ),
   );
 
   void onQRViewCreated(QRViewController controller)
@@ -103,5 +103,4 @@ class _QrCodePageState extends State<QrCodePage> {
       maxLines: 3,),
   );
 }
-
 

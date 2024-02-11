@@ -22,8 +22,8 @@ class _LoginPageState extends State<LoginPage> {
         title: const Center(
           child: Text("Login",
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: Colors.white
+                fontWeight: FontWeight.bold,
+                color: Colors.white
             ),
           ),
         ),
@@ -34,22 +34,22 @@ class _LoginPageState extends State<LoginPage> {
         children: [
           const Text("Username",
             style: TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 20
+                fontWeight: FontWeight.bold,
+                fontSize: 20
             )
             ,),
           SizedBox(height: 10,width:screenWidth),
-           SizedBox(
-             width: 250,
+          SizedBox(
+            width: 250,
             child: TextFormField(
               decoration:const InputDecoration(
-                  border: OutlineInputBorder(borderRadius:BorderRadius.all(
-                      Radius.circular(25)
-                  ),
+                border: OutlineInputBorder(borderRadius:BorderRadius.all(
+                    Radius.circular(25)
+                ),
                     borderSide:BorderSide(color: Colors.black
                         ,width: 2.0
                     )
-                  ),
+                ),
               ),
             ),
           ),
