@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:ieee_qr_code/Pages/qrCodePage.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -77,11 +78,35 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(height: 20,),
-          ElevatedButton(onPressed: () {
-            setState(() {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
-            });
-          }, child: const Text("LOGIN"))
+          // ElevatedButton(onPressed: () {
+          //   setState(() {
+          //     Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+          //   });
+          // }, child: const Text("LOGIN")
+          // )
+          SizedBox(
+            width: 250,
+            child: AnimatedButton(pressEvent: (){
+              AwesomeDialog(context: context,
+              dialogType: DialogType.question,
+                title: "CONFIRM?",
+                showCloseIcon: true,
+                animType: AnimType.scale,
+                btnOkText: "CONFIRM!",
+                btnCancelText: "DON'T CONFIRM!",
+                btnOkOnPress: (){
+                setState(() {
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                });
+                },
+                btnCancelOnPress: (){}
+              ).show();
+            },
+              text: "LOGIN",
+              buttonTextStyle: const TextStyle(color: Colors.white),
+              color: Colors.blue[900],
+            ),
+          )
         ],
       ),
     );
