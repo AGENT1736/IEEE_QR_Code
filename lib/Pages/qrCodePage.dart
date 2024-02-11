@@ -30,7 +30,7 @@ class _QrCodePageState extends State<QrCodePage> {
         ),
         backgroundColor: Colors.blue[900],
         title:const Center(
-          child: Text("IEEE R8 QR-CODE",
+          child: Text("IEEE QR-CODE",
             style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white)

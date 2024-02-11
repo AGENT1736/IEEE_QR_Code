@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "665305058272",
+    "project_id": "ieee-qr-code",
+    "storage_bucket": "ieee-qr-code.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665305058272:android:dcef3c9b45ac929eb83985",
+        "android_client_info": {
+          "package_name": "com.example.ieee_qr_code"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAtE4TB5gGGQbCZX711J2oUyqwhHrAREOg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
