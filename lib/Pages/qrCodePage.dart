@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:ieee_qr_code/api/sheets/sheets_api.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodePage extends StatefulWidget {
@@ -119,9 +120,22 @@ class _QrCodePageState extends State<QrCodePage> {
         content: Text("Data:\n$data"),
         actions: [
           TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text("Deny", style: TextStyle(color: Colors.blue[900], fontWeight: FontWeight.bold),)),
-          TextButton(onPressed: (){
-            SheetsApi.scanQRtoSheet(SheetsApi.getSheetIdFromUrl("https://docs.google.com/spreadsheets/d/1SCLBR0p9-VtzcB2I8VL4_LaTBZTxmXboMWb3nEMN7Uw/edit?resourcekey#gid=1078871735"), "test", data!, [3, 8], 1);
-            Navigator.of(context).pop();
+          TextButton(onPressed: () async {
+            // Simple internet check
+            if(await InternetConnectionChecker().hasConnection) {
+              bool checkedComplete = await SheetsApi.scanQRtoSheet(SheetsApi.getSheetIdFromUrl("https://docs.google.com/spreadsheets/d/1SCLBR0p9-VtzcB2I8VL4_LaTBZTxmXboMWb3nEMN7Uw/edit?resourcekey#gid=1078871735"), "test", data!, [3, 8], 1);
+              // Handles if the check was completed and error cases
+              if (checkedComplete) {
+                if(context.mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Successfully added")));}
+              }
+              else {
+                if(context.mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("An error has occurred")));}
+              }
+              if(context.mounted){Navigator.of(context).pop();}
+            }
+            else {
+              if(context.mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No internet connection, Try again")));}
+            }
             }, child: Text("Confirm", style: TextStyle(color: Colors.blue[900], fontWeight: FontWeight.bold),))
         ],
       );

@@ -8,20 +8,64 @@ class SheetsApi {
   static late Spreadsheet spreadsheet;
   static late List<Worksheet> workSheets;
 
-  static void scanQRtoSheet(String? ssID, String workSheet, String data, List<int> searchColumnIndex, int checkColumn) async {
+  static Future<bool> scanQRtoSheet(String? ssID, String workSheet, String data, List<int> searchColumnIndex, int checkColumn) async {
+    // Inits the connection with the sheet
     if (!await init(ssID)) {
-      print("fail");
-      return;
+      return false;
     }
     Worksheet? ws = spreadsheet.worksheetByTitle(workSheet);
     int rowIndex = await getRowByValues(ws, searchColumnIndex, data.split(","));
     if (rowIndex != -1){
       setCheckBoxCellTrue(spreadsheet.worksheetByTitle(workSheet), checkColumn, rowIndex+1);
-      print("succsess $rowIndex");
+      return true;
     }
     else {
-      print("fail");
+      return false;
     }
+  }
+
+  static Future<bool> addQRtoSheet(String? ssID, String workSheet, List<int> qrParameterColumns) async {
+    // Inits the connection with the sheet
+    if (!await init(ssID)) {
+    return false;
+    }
+    Worksheet? ws = spreadsheet.worksheetByTitle(workSheet);
+
+    // Handles worksheet not existing
+    if (ws == null) {
+      print("work sheet doesn't exist");
+      return false;
+    }
+
+    // Checks if the columns arent out of bounds
+    if (ws.columnCount < qrParameterColumns.length) {
+      print("Coordinates of columns out of bounds");
+      return false;
+    }
+
+    bool insertCheck = false;
+    // Grabs all the rows
+    List<List<String>> allRows = await ws.values.allRows();
+    List<String> row;
+    int targetColumn = allRows[0].length+1;
+    String qrImageData;
+    String qrURL;
+
+    for(int i = 1; i < allRows.length; i++) {
+      qrImageData = ""; // This variable gets the to be encoded data added to it
+      row = allRows[i];
+
+      for (int j = 0; j < qrParameterColumns.length; j++) {
+        qrImageData += '${row[qrParameterColumns[j]-1]},';
+      }
+      // Removes the comma at the end
+      qrImageData = qrImageData.substring(0, qrImageData.length-1);
+      qrURL = "=image(\"https://chart.googleapis.com/chart?chs=500x400&cht=qr&chl=\"&ENCODEURL(\"$qrImageData\"))";
+      insertCheck = await ws.values.insertValue(qrURL, column: targetColumn, row: i+1);
+      if(!insertCheck) {return false;}
+    }
+
+    return true;
   }
 
   // Extracts id from the part of the url that is between d/ and /edit
