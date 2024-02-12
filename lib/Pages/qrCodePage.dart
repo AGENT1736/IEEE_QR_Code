@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:ieee_qr_code/api/sheets/sheets_api.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodePage extends StatefulWidget {
@@ -11,7 +12,7 @@ class QrCodePage extends StatefulWidget {
 
 
 class _QrCodePageState extends State<QrCodePage> {
-
+  bool gotValidQr = false;
   final qrKey = GlobalKey(debugLabel: 'QR');
 
   Barcode? barcode;
@@ -86,9 +87,14 @@ class _QrCodePageState extends State<QrCodePage> {
   void onQRViewCreated(QRViewController controller)
   {
     setState(() => this.controller = controller);
+    controller.scannedDataStream.listen((barcode)=> setState(() async {
+      if(gotValidQr) {return;}
+      gotValidQr = true;
 
-    controller.scannedDataStream.listen((barcode)=> setState(() {
       this.barcode = barcode;
+      await _dialogBuilder(context);
+
+      gotValidQr = false;
     }));
   }
 
@@ -102,5 +108,25 @@ class _QrCodePageState extends State<QrCodePage> {
       barcode != null ? "Result: ${barcode!.code}" : "Scan a code!",
       maxLines: 3,),
   );
+
+  // This is used for the alert dialogue on scan
+  Future<void> _dialogBuilder(BuildContext context) {
+    String? data = barcode?.code;
+    barcode = null;
+    return showDialog(context: context, builder: (context) {
+      return AlertDialog(
+        title: const Text("Confirm?"),
+        content: Text("Data:\n$data"),
+        actions: [
+          TextButton(onPressed: (){Navigator.of(context).pop();}, child: Text("Deny", style: TextStyle(color: Colors.blue[900], fontWeight: FontWeight.bold),)),
+          TextButton(onPressed: (){
+            SheetsApi.scanQRtoSheet(SheetsApi.getSheetIdFromUrl("https://docs.google.com/spreadsheets/d/1SCLBR0p9-VtzcB2I8VL4_LaTBZTxmXboMWb3nEMN7Uw/edit?resourcekey#gid=1078871735"), "test", data!, [3, 8], 1);
+            Navigator.of(context).pop();
+            }, child: Text("Confirm", style: TextStyle(color: Colors.blue[900], fontWeight: FontWeight.bold),))
+        ],
+      );
+    });
+  }
+
 }
 
