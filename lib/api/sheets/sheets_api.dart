@@ -8,6 +8,22 @@ class SheetsApi {
   static late Spreadsheet spreadsheet;
   static late List<Worksheet> workSheets;
 
+  static void scanQRtoSheet(String? ssID, String workSheet, String data, List<int> searchColumnIndex, int checkColumn) async {
+    if (!await init(ssID)) {
+      print("fail");
+      return;
+    }
+    Worksheet? ws = spreadsheet.worksheetByTitle(workSheet);
+    int rowIndex = await getRowByValues(ws, searchColumnIndex, data.split(","));
+    if (rowIndex != -1){
+      setCheckBoxCellTrue(spreadsheet.worksheetByTitle(workSheet), checkColumn, rowIndex+1);
+      print("succsess $rowIndex");
+    }
+    else {
+      print("fail");
+    }
+  }
+
   // Extracts id from the part of the url that is between d/ and /edit
   static String? getSheetIdFromUrl(String url) {
     var re = RegExp(r'(?<=d/)(.*)(?=/edit)');
@@ -22,11 +38,11 @@ class SheetsApi {
   }
 
   // Inits the sheet variables that as in selects which sheet is used basically
-  static void init(String? ssID) async {
+  static Future<bool> init(String? ssID) async {
     // Handles empty sheet id
     if (ssID!.isEmpty){
       print("Error: SpreadSheet id is empty");
-      return;
+      return false;
     }
 
     final gsheets = GSheets(_credentials);
@@ -34,10 +50,7 @@ class SheetsApi {
     spreadsheet = await gsheets.spreadsheet(ssID);
     // Grabs work sheets within the sheet
     workSheets = spreadsheet.sheets;
-
-    Worksheet? test = spreadsheet.worksheetByTitle("test");
-    int n = await getRowByValues(test, [3, 8], ["Seif Eldin Abd Elmoniem Shaheen", "01144784159"]);
-    setCheckBoxCellTrue(test, 1, n);
+    return true;
   }
 
   // Gets a list of the titles from the worksheet objects
