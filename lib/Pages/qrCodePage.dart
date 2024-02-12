@@ -136,7 +136,11 @@ class _QrCodePageState extends State<QrCodePage> {
             else {
               if(context.mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("No internet connection, Try again")));}
             }
-            }, child: Text("Confirm", style: TextStyle(color: Colors.blue[900], fontWeight: FontWeight.bold),))
+            }, child: Text("Confirm",
+            style: TextStyle(color: Colors.blue[900],
+                fontWeight: FontWeight.bold),
+            )
+          )
         ],
       );
     });
