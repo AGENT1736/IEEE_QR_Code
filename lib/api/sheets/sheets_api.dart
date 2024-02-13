@@ -97,6 +97,19 @@ class SheetsApi {
     return true;
   }
 
+  // Converts Header name to index
+  static Future<int> headerNameToIndex(String? ssID, String workSheet,String name) async {
+    if (ssID!.isEmpty){
+      print("Error: SpreadSheet id is empty");
+      return -1;
+    }
+    final gsheets = GSheets(_credentials);
+    spreadsheet = await gsheets.spreadsheet(ssID);
+    Worksheet? ws = spreadsheet.worksheetByTitle(workSheet);
+    List<String>? headerRow = await ws?.values.row(1);
+    return headerRow!.indexOf(name)+1;
+  }
+
   // Gets a list of the titles from the worksheet objects
   static List<String>? getWorkSheetsTitles(List<Worksheet> ws) {
     List<String> workSheetsTitles = [];

@@ -186,7 +186,7 @@ class _LoginPageState extends State<LoginPage> {
                         email: emailController.text,
                         password: passwordController.text
                     );
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                    // Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
                   } on FirebaseAuthException catch (e) {
                     if (e.code == 'user-not-found') {
                       print('No user found for that email.');
@@ -218,13 +218,13 @@ class _LoginPageState extends State<LoginPage> {
                   btnCancelText: "DON'T CONFIRM!",
                   btnOkOnPress: (){
                     setState(() async {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
                       try {
                         final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                           email: emailController.text,
                           password: passwordController.text,
                         );
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                        // Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
                           print('The password provided is too weak.');

@@ -5,7 +5,11 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodePage extends StatefulWidget {
-  const QrCodePage({super.key});
+  final String ssID, workSheet;
+  final List<int> qrColumns;
+  final int checkColumn;
+
+  const QrCodePage({super.key, required this.ssID, required this.workSheet, required this.qrColumns, required this.checkColumn});
 
   @override
   State<QrCodePage> createState() => _QrCodePageState();
@@ -123,7 +127,7 @@ class _QrCodePageState extends State<QrCodePage> {
           TextButton(onPressed: () async {
             // Simple internet check
             if(await InternetConnectionChecker().hasConnection) {
-              bool checkedComplete = await SheetsApi.scanQRtoSheet(SheetsApi.getSheetIdFromUrl("https://docs.google.com/spreadsheets/d/1SCLBR0p9-VtzcB2I8VL4_LaTBZTxmXboMWb3nEMN7Uw/edit?resourcekey#gid=1078871735"), "test", data!, [3, 8], 1);
+              bool checkedComplete = await SheetsApi.scanQRtoSheet(widget.ssID, widget.workSheet, data!, widget.qrColumns, widget.checkColumn);
               // Handles if the check was completed and error cases
               if (checkedComplete) {
                 if(context.mounted){ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Successfully added")));}
