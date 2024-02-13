@@ -13,9 +13,54 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
 
+  //these are the controllers that are used to fetch the data entered by the user
   TextEditingController emailController = new TextEditingController();
   TextEditingController usernameController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
+  //this bool is used to check if the used is an admin
+  late bool isAdmin;
+
+
+  @override void dispose() {
+    // TODO: implement dispose
+    emailController.dispose();
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  //this is the signup function that will be used to enter the data required to register and login
+  Future signUp() async{
+    if(passwordConfirmed()){
+      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim()
+      );
+
+      //this is where the use details will be added!
+      addUserData(usernameController.text.trim(), emailController.text.trim(), passwordController.text.trim(), isAdmin);
+    }
+  }
+
+  // this function will be used to add the user credential to cloud firestore to use them later
+  Future addUserData(String username,String email,String password, bool isAdmin) async{
+    await FirebaseFirestore.instance.collection('users').add({
+      'username': username,
+      'email': email,
+      'password': password,
+      'isAdmin': isAdmin,
+    });
+  }
+
+  bool passwordConfirmed(){
+    if(passwordController.text.trim().isNotEmpty)
+      {
+        return true;
+      }
+    else{
+      return false;
+    }
+  }
 
 
   @override
@@ -90,6 +135,8 @@ class _LoginPageState extends State<LoginPage> {
             ),
           ),
           const SizedBox(height: 25),
+
+
           const Text("Password",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -133,6 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                 btnOkOnPress: (){
                 setState(() async {
                   // Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+
                   try {
                     final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
                         email: emailController.text,
@@ -146,7 +194,8 @@ class _LoginPageState extends State<LoginPage> {
                       print('Wrong password provided for that user.');
                     }
                   }
-                });
+                }
+                );
                 },
                 btnCancelOnPress: (){}
               ).show();
@@ -169,7 +218,7 @@ class _LoginPageState extends State<LoginPage> {
                   btnCancelText: "DON'T CONFIRM!",
                   btnOkOnPress: (){
                     setState(() async {
-                      // Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
                       try {
                         final credential = await FirebaseAuth.instance.createUserWithEmailAndPassword(
                           email: emailController.text,
