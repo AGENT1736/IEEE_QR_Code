@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:ieee_qr_code/Pages/add_event_page.dart';
 import 'package:ieee_qr_code/Pages/pre_scan_page.dart';
 import 'package:ieee_qr_code/Widgets/event_card.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
@@ -16,6 +17,12 @@ class _AdminPageState extends State<AdminPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.blue[900],
+        child: const Icon(Icons.add, color: Colors.white,),
+        onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const AddEventPage()),);
+      }),
       backgroundColor: Colors.white,
       appBar: AppBar(
         leading: IconButton(

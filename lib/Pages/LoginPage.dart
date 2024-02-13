@@ -1,11 +1,8 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_qr_code/Pages/adminPage.dart';
-import 'package:ieee_qr_code/Pages/qrCodePage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:toggle_switch/toggle_switch.dart';
+import 'package:ieee_qr_code/Pages/userPage.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -17,9 +14,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
 
 
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController usernameController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -144,11 +141,11 @@ class _LoginPageState extends State<LoginPage> {
 
                           if(re.hasMatch(emailData))
                             {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminPage()),);
+                              if(context.mounted){Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminPage()),);}
                             }
                           else
                             {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                            if(context.mounted){Navigator.push(context, MaterialPageRoute(builder: (context) => const UserPage()),);}
                             }
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
