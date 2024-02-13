@@ -1,12 +1,10 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_qr_code/Pages/adminPage.dart';
-import 'package:ieee_qr_code/Pages/qrCodePage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:ieee_qr_code/Pages/userPage.dart';
 import 'package:toggle_switch/toggle_switch.dart';
+
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -106,6 +104,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
+
           ),
           const SizedBox(height: 20,),
 
@@ -147,6 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                         else
                           {
                             Navigator.push(context, MaterialPageRoute(builder: (context) => const UserPage()),);
+
                           }
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
