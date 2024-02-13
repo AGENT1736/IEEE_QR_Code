@@ -103,7 +103,7 @@ class _AddEventPageState extends State<AddEventPage> {
                         title: const Text("Image preview"),
                         content: FadeInImage(
                           image:NetworkImage(iconUrlController.text),
-                          placeholder: const AssetImage('lib/images/placeholder.png'),
+                          placeholder: const AssetImage('assets/placeholder.png'),
                           imageErrorBuilder:(context, error, stackTrace) {
                             return const Icon(Icons.error, color: Colors.red);
                           },
