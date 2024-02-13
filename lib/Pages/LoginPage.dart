@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:ieee_qr_code/Pages/adminPage.dart';
 import 'package:ieee_qr_code/Pages/qrCodePage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:ieee_qr_code/Pages/userPage.dart';
 import 'package:toggle_switch/toggle_switch.dart';
 
 class LoginPage extends StatefulWidget {
@@ -145,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         else
                           {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const UserPage()),);
                           }
                       } on FirebaseAuthException catch (e) {
                         if (e.code == 'weak-password') {
