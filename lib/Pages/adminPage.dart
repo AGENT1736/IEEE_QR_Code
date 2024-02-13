@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ieee_qr_code/Pages/pre_scan_page.dart';
 import 'package:ieee_qr_code/Widgets/event_card.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import '../api/fireStore/fireStore_api.dart';
@@ -60,7 +61,10 @@ class _AdminPageState extends State<AdminPage> {
                         title: Text(eventDocuments[index]['name']),
                         content: Text("What would you like to do?", style: TextStyle(color: Colors.blue.shade900, fontSize: 15, fontWeight: FontWeight.bold),),
                         actions: [
-                          TextButton(onPressed: (){}, child: Text("Scan", style: TextStyle(color: Colors.blue.shade900, fontSize: 15, fontWeight: FontWeight.bold),)),
+                          TextButton(onPressed: (){
+                            Navigator.of(context).pop();
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => PreScan(eventDoc: eventDocuments[index])),);
+                            }, child: Text("Scan", style: TextStyle(color: Colors.blue.shade900, fontSize: 15, fontWeight: FontWeight.bold),)),
                           TextButton(onPressed: (){}, child: const Text("Edit", style: TextStyle(color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold),)),
                           TextButton(onPressed: (){
                             setState(() {
