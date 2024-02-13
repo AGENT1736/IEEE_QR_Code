@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:ieee_qr_code/Pages/adminPage.dart';
 import 'package:ieee_qr_code/Pages/qrCodePage.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:toggle_switch/toggle_switch.dart';
@@ -128,12 +129,27 @@ class _LoginPageState extends State<LoginPage> {
                     btnOkOnPress: (){
                       setState(() async{
                         try {
+
+                          String emailData = emailController.text;
+                          String passwordData = passwordController.text;
+
+                          var re = RegExp(r'@admin.com');
+
+                          var re2 = RegExp(r'@dev.com');
+
                           final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: emailController.text,
-                            password: passwordController.text,
+                            email: emailData,
+                            password: passwordData,
                           );
 
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                          if(re.hasMatch(emailData))
+                            {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminPage()),);
+                            }
+                          else
+                            {
+                              Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                            }
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'weak-password') {
                             print('The password provided is too weak.');
