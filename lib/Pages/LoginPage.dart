@@ -25,149 +25,144 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
+
       appBar: AppBar(
+        elevation:5,
         backgroundColor: Colors.blue[900],
         leading: const Icon(
           Icons.person,
           color: Colors.white,
         ),
-        title: const Center(
-          child: Text("Login",
-            style: TextStyle(
-                fontWeight: FontWeight.bold,
-                color: Colors.white
-            ),
+        centerTitle: true,
+        title: Text("Login",
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: Colors.white
           ),
         ),
       ),
 
 
-      body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center ,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center ,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+
+          //email input
+          const Text("Email",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 20
+            )
+            ,),
 
 
-            //developer exclusive
+          SizedBox(height: 10,width:screenWidth),
+
+          //Email Text form field
+          SizedBox(
+            width: 250,
+            child: TextFormField(
+              controller: emailController,
+              decoration:const InputDecoration(
+                border: OutlineInputBorder(borderRadius:BorderRadius.all(
+                    Radius.circular(25)
+                ),
+                    borderSide:BorderSide(color: Colors.blueAccent
+                        ,width: 2.0
+                    )
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 20,),
 
 
-            //email input
-            const Text("Email",
+          //password
+          const Text("Password",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 20
               )
-              ,),
+          ),
+          const SizedBox(height: 10),
 
 
-            SizedBox(height: 10,width:screenWidth),
-
-            //Email Text form field
-            SizedBox(
-              width: 250,
-              child: TextFormField(
-                controller: emailController,
-                decoration:const InputDecoration(
-                  border: OutlineInputBorder(borderRadius:BorderRadius.all(
-                      Radius.circular(25)
-                  ),
-                      borderSide:BorderSide(color: Colors.black
-                          ,width: 2.0
-                      )
-                  ),
+          //password text form field
+          SizedBox(
+            width: 250,
+            child: TextFormField(
+              controller: passwordController,
+              obscureText: true,
+              decoration:const InputDecoration(
+                border: OutlineInputBorder(borderRadius:BorderRadius.all(
+                    Radius.circular(25)
+                ),
+                    borderSide:BorderSide(color: Colors.blueAccent
+                        ,width: 2.0
+                    )
                 ),
               ),
             ),
-            const SizedBox(height: 20,),
+          ),
+          const SizedBox(height: 20,),
 
 
-            //password
-            const Text("Password",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20
-                )
-            ),
-            const SizedBox(height: 10),
+          SizedBox(
+            width: 250,
+            child: AnimatedButton(
+              text: "LOGIN",
+              color: Colors.blue[900],
+              pressEvent: (){
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.question,
+                  title: "CONFIRM?",
+                  showCloseIcon: true,
+                  animType: AnimType.scale,
+                  btnOkText: "YES!",
+                  btnCancelText: "NO!",
+                  btnOkOnPress: (){
+                    setState(() async{
+                      try {
 
+                        String emailData = emailController.text;
+                        String passwordData = passwordController.text;
 
-            //password text form field
-            SizedBox(
-              width: 250,
-              child: TextFormField(
-                controller: passwordController,
-                obscureText: true,
-                decoration:const InputDecoration(
-                  border: OutlineInputBorder(borderRadius:BorderRadius.all(
-                      Radius.circular(25)
-                  ),
-                      borderSide:BorderSide(color: Colors.black
-                          ,width: 2.0
-                      )
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20,),
+                        var re = RegExp(r'@admin.com');
 
+                        var re2 = RegExp(r'@dev.com');
 
-            SizedBox(
-              width: 250,
-              child: AnimatedButton(
-                text: "LOGIN",
-                color: Colors.blue[900],
-                pressEvent: (){
-                  AwesomeDialog(
-                    context: context,
-                    dialogType: DialogType.question,
-                    title: "CONFIRM?",
-                    showCloseIcon: true,
-                    animType: AnimType.scale,
-                    btnOkText: "YES!",
-                    btnCancelText: "NO!",
-                    btnOkOnPress: (){
-                      setState(() async{
-                        try {
+                        final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+                          email: emailData,
+                          password: passwordData,
+                        );
 
-                          String emailData = emailController.text;
-                          String passwordData = passwordController.text;
-
-                          var re = RegExp(r'@admin.com');
-
-                          var re2 = RegExp(r'@dev.com');
-
-                          final credential = await FirebaseAuth.instance.signInWithEmailAndPassword(
-                            email: emailData,
-                            password: passwordData,
-                          );
-
-                          if(re.hasMatch(emailData))
-                            {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminPage()),);
-                            }
-                          else
-                            {
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
-                            }
-                        } on FirebaseAuthException catch (e) {
-                          if (e.code == 'weak-password') {
-                            print('The password provided is too weak.');
-                          } else if (e.code == 'email-already-in-use') {
-                            print('The account already exists for that email.');
+                        if(re.hasMatch(emailData))
+                          {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const AdminPage()),);
                           }
-                        } catch (e) {
-                          print(e);
+                        else
+                          {
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => const QrCodePage()),);
+                          }
+                      } on FirebaseAuthException catch (e) {
+                        if (e.code == 'weak-password') {
+                          print('The password provided is too weak.');
+                        } else if (e.code == 'email-already-in-use') {
+                          print('The account already exists for that email.');
                         }
-                      });
-                    }
-                  ).show();
-                } ,
-              ),
-            )
+                      } catch (e) {
+                        print(e);
+                      }
+                    });
+                  }
+                ).show();
+              } ,
+            ),
+          )
 
-          ],
-        ),
+        ],
       ),
     );
   }
