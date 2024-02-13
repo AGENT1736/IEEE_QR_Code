@@ -2,6 +2,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:ieee_qr_code/Pages/LoginPage.dart';
+import 'package:ieee_qr_code/Pages/userPage.dart';
+import 'Pages/adminPage.dart';
 import 'Pages/qrCodePage.dart';
 
 void main() async {
@@ -27,7 +29,7 @@ class _MyAppState extends State<MyApp> {
         {
           print("User is currently signed out!");
         } else {
-        print("User is signed in!");
+          print("User is signed in!");
       }
     });
     super.initState();
@@ -39,7 +41,8 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       //this statement checks if the user is logged in if so? => it automatically skips the login page and goes to the qr code scanner page
       //if not it navigates to the login page
-      home: FirebaseAuth.instance.currentUser == null? const LoginPage():const QrCodePage(),
+
+      home: FirebaseAuth.instance.currentUser == null? const LoginPage():const UserPage()
     );
   }
 }

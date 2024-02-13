@@ -48,6 +48,7 @@ class _QrCodePageState extends State<QrCodePage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          elevation: 5,
           leading: IconButton(
             icon: const Icon(
                 Icons.arrow_back,
@@ -60,12 +61,11 @@ class _QrCodePageState extends State<QrCodePage> {
             },
           ),
           backgroundColor: Colors.blue[900],
-          title:const Center(
-            child: Text("IEEE QR-CODE",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white)
-            ),
+          centerTitle: true,
+          title:Text("IEEE QR-CODE",
+              style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white)
           ),
         ),
         body: Stack(alignment: Alignment.center,
