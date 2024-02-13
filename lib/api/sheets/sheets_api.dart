@@ -49,7 +49,7 @@ class SheetsApi {
     List<String> row;
     int targetColumn = allRows[0].length+1;
     String qrImageData;
-    String qrURL;
+    String qrKey;
 
     for(int i = 1; i < allRows.length; i++) {
       qrImageData = ""; // This variable gets the to be encoded data added to it
@@ -60,8 +60,8 @@ class SheetsApi {
       }
       // Removes the comma at the end
       qrImageData = qrImageData.substring(0, qrImageData.length-1);
-      qrURL = "=image(\"https://chart.googleapis.com/chart?chs=500x400&cht=qr&chl=\"&ENCODEURL(\"$qrImageData\"))";
-      insertCheck = await ws.values.insertValue(qrURL, column: targetColumn, row: i+1);
+      qrKey = "=ENCODEURL(\"$qrImageData\")";
+      insertCheck = await ws.values.insertValue(qrKey, column: targetColumn, row: i+1);
       if(!insertCheck) {return false;}
     }
 
