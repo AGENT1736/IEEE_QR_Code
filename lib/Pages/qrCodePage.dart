@@ -1,5 +1,7 @@
 import 'dart:io';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:ieee_qr_code/Pages/LoginPage.dart';
 import 'package:ieee_qr_code/api/sheets/sheets_api.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
@@ -51,8 +53,9 @@ class _QrCodePageState extends State<QrCodePage> {
                 Icons.arrow_back,
                 color: Colors.white),
             onPressed: (){
-              setState(() {
-                Navigator.pop(context);
+              setState(() async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()), (route) => false);
               });
             },
           ),

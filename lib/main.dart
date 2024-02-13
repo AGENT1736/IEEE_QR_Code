@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_qr_code/Pages/Login%20Page.dart';
+import 'package:ieee_qr_code/Pages/LoginPage.dart';
 import 'Pages/qrCodePage.dart';
 
 void main() async {
