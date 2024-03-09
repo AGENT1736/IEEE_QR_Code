@@ -33,7 +33,7 @@ class EventCard extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Image.network(imageUrl, height: 59, fit: BoxFit.cover),
+            Image.network(imageUrl, height: 59, fit: BoxFit.fill),
             const SizedBox(
               width: 15,
             ),

@@ -5,7 +5,6 @@ import 'package:ieee_qr_code/Pages/add_event_page.dart';
 import 'package:ieee_qr_code/Pages/pre_scan_page.dart';
 import 'package:ieee_qr_code/Widgets/event_card.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
-import '../api/fireStore/fireStore_api.dart';
 import 'LoginPage.dart';
 
 class AdminPage extends StatefulWidget {
@@ -75,7 +74,7 @@ class _AdminPageState extends State<AdminPage> {
                           TextButton(onPressed: (){}, child: const Text("Edit", style: TextStyle(color: Colors.green, fontSize: 15, fontWeight: FontWeight.bold),)),
                           TextButton(onPressed: (){
                             setState(() {
-                              FireStoreApi.deleteEvent(eventDocuments[index].reference.id);
+                              // FireStoreApi.deleteEvent(eventDocuments[index].reference.id);
                               Navigator.of(context).pop();
                             });
                             }, child: const Text("Delete", style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.bold),)),

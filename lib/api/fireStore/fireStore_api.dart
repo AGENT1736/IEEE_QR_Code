@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class FireStoreApi {
-  static Future<void> addEvent (String name, String sheetUrl, String iconUrl, Map<String, List<String>> workSheets, List<int> qrCols) async {
+  static Future<void> addEvent (String name, String sheetUrl, String iconUrl, Map<String, List<String>> workSheets, List<String> qrCols) async {
     await FirebaseFirestore.instance.collection('events').add(
       {
         "name" : name,
