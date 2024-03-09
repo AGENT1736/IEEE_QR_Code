@@ -1,17 +1,18 @@
 import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:ieee_qr_code/Pages/LoginPage.dart';
+import 'package:ieee_qr_code/Pages/userPage.dart';
 import 'package:ieee_qr_code/api/sheets/sheets_api.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:loader_overlay/loader_overlay.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 
 class QrCodePage extends StatefulWidget {
-  final String ssID, workSheet;
+  final String ssID, workSheet, checkName;
   final List<int> qrColumns;
   final int checkColumn;
 
-  const QrCodePage({super.key, required this.ssID, required this.workSheet, required this.qrColumns, required this.checkColumn});
+  const QrCodePage({super.key, required this.ssID, required this.workSheet, required this.qrColumns, required this.checkColumn, required this.checkName});
 
   @override
   State<QrCodePage> createState() => _QrCodePageState();
@@ -43,12 +44,18 @@ class _QrCodePageState extends State<QrCodePage> {
   @override
   Widget build(BuildContext context) {
 
-    var screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
           elevation: 5,
+          actions: [
+            IconButton(onPressed: () async {
+              context.loaderOverlay.show();
+              await SheetsApi.init(widget.ssID);
+              await SheetsApi.updateRowsLocal(widget.workSheet);
+              context.loaderOverlay.hide();
+            }, icon: const Icon(Icons.refresh, color: Colors.white,))
+          ],
           leading: IconButton(
             icon: const Icon(
                 Icons.arrow_back,
@@ -56,13 +63,13 @@ class _QrCodePageState extends State<QrCodePage> {
             onPressed: (){
               setState(() async {
                 await FirebaseAuth.instance.signOut();
-                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()), (route) => false);
+                Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const UserPage()), (route) => false);
               });
             },
           ),
           backgroundColor: Colors.blue[900],
           centerTitle: true,
-          title:Text("IEEE QR-CODE",
+          title:Text(widget.workSheet + " - " + widget.checkName,
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: Colors.white)
