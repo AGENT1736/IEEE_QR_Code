@@ -7,12 +7,9 @@ class SheetsApi {
 
   static late Spreadsheet spreadsheet;
   static late List<Worksheet> workSheets;
+  static late List<List<String>> allRows;
 
   static Future<bool> scanQRtoSheet(String? ssID, String workSheet, String data, List<int> searchColumnIndex, int checkColumn) async {
-    // Inits the connection with the sheet
-    if (!await init(ssID)) {
-      return false;
-    }
     Worksheet? ws = spreadsheet.worksheetByTitle(workSheet);
     int rowIndex = await getRowByValues(ws, searchColumnIndex, data.split(","));
     if (rowIndex != -1){
@@ -149,6 +146,12 @@ class SheetsApi {
     }
   }
 
+  // Update the rows locally
+  static Future<void> updateRowsLocal(String workSheet) async {
+    Worksheet? ws = spreadsheet.worksheetByTitle(workSheet);
+    allRows = (await ws?.values.allRows())!;
+  }
+
   // This function takes a list of columns to search through with the list of values and returns the row that matches all values in the columns
   static Future<int> getRowByValues(Worksheet? ws, List<int> searchColumnIndex, List<String> searchColumnValue) async{
     // Handles worksheet not existing
@@ -172,7 +175,10 @@ class SheetsApi {
     int rowCount = ws.rowCount;
     int numberOfSearchParameters = searchColumnValue.length;
 
-    List<List<String>> allRows = await ws.values.allRows();
+    if (allRows.isEmpty) {
+      await updateRowsLocal(ws.title);
+    }
+
     List<String> row;
 
     int foundCount = 0;

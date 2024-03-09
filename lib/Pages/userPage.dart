@@ -17,6 +17,7 @@ class _UserPageState extends State<UserPage> {
     return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          centerTitle: true,
           leading: IconButton(
             icon: const Icon(
                 Icons.arrow_back,
